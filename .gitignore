@@ -1,0 +1,19 @@
+# Virtuelle Umgebung
+env/
+
+# SQLite-Datenbank
+db.sqlite3
+
+# __pycache__ und Kompilate
+__pycache__/
+*.py[cod]
+
+# VS Code & Thonny
+.vscode/
+.venv/
+*.swp
+*.swo
+
+# Betriebssystem-Dateien
+.DS_Store
+Thumbs.db
