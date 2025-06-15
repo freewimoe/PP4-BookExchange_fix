@@ -1,0 +1,9 @@
+{% extends "books/base.html" %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <h2 class="mb-4 text-success">🎉 Thank you for your offer!</h2>
+    <p>Your book offer has been submitted successfully.</p>
+    <a href="{% url 'book_list' %}" class="btn btn-outline-primary mt-3">← Back to Book List</a>
+</div>
+{% endblock %}
