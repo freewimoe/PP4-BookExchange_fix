@@ -1,19 +1,33 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from .models import Offer, Book
+from import_export import resources
+from .models import Book, Offer
 
+
+# 📘 CSV-Import/Export-Resource für Book
+class BookResource(resources.ModelResource):
+    class Meta:
+        model = Book
+        import_id_fields = ['isbn']  # für eindeutigen Import
+        fields = (
+            'title', 'author', 'isbn', 'edition',
+            'publisher', 'section', 'school_class', 'notes'
+        )
+
+
+@admin.register(Book)
 class BookAdmin(ImportExportModelAdmin):
-    pass
+    resource_class = BookResource
+    list_display = ('title', 'author', 'isbn', 'edition', 'school_class', 'section')
+    search_fields = ('title', 'author', 'isbn')
+    list_filter = ('school_class', 'section')
+
+
+@admin.register(Offer)
 class OfferAdmin(admin.ModelAdmin):
     list_display = (
-        'book',           # das ForeignKey-Feld zeigt automatisch book.title im Admin
-        'seller',         # verlinkt auf den Benutzer
-        'condition',
-        'price',
-        'contact_email',
-        'created_at',
-        'active'
+        'book', 'seller', 'condition', 'price',
+        'contact_email', 'created_at', 'active',
     )
-
-admin.site.register(Offer, OfferAdmin)
-admin.site.register(Book, BookAdmin)
+    list_filter = ('active', 'condition')
+    search_fields = ('book__title', 'seller__username', 'contact_email')
