@@ -1,6 +1,9 @@
 from django.contrib import admin
-from .models import Offer
+from import_export.admin import ImportExportModelAdmin
+from .models import Offer, Book
 
+class BookAdmin(ImportExportModelAdmin):
+    pass
 class OfferAdmin(admin.ModelAdmin):
     list_display = (
         'book',           # das ForeignKey-Feld zeigt automatisch book.title im Admin
@@ -13,3 +16,4 @@ class OfferAdmin(admin.ModelAdmin):
     )
 
 admin.site.register(Offer, OfferAdmin)
+admin.site.register(Book, BookAdmin)

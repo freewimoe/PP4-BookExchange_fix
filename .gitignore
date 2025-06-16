@@ -13,6 +13,7 @@ __pycache__/
 .venv/
 *.swp
 *.swo
+.env
 
 # Betriebssystem-Dateien
 .DS_Store
