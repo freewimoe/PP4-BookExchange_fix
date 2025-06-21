@@ -1,21 +1,27 @@
 from django.shortcuts import render
 from .models import Offer
 from .forms import OfferForm
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect
 
 def offer_list(request):
     offers = Offer.objects.filter(active=True)
     return render(request, 'books/book_list.html', {'offers': offers})
 
+@login_required
 def create_offer_view(request):
     if request.method == 'POST':
         form = OfferForm(request.POST, request.FILES)
         if form.is_valid():
             offer = form.save(commit=False)
+            offer.seller = request.user  # 🔐 seller wird gesetzt
             offer.save()
-            return redirect('thanks')
+            return redirect('offer_list')
     else:
         form = OfferForm()
     return render(request, 'books/create_offer.html', {'form': form})
+
+
 
 def thanks_view(request):
     return render(request, 'books/thanks.html')
