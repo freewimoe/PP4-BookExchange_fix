@@ -18,3 +18,10 @@ __pycache__/
 # Betriebssystem-Dateien
 .DS_Store
 Thumbs.db
+
+# Python-Cache-Dateien
+__pycache__/
+*.py[cod]   
+
+# static files
+static/

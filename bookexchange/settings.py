@@ -119,38 +119,25 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
+STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
+
+# Lokale statische Dateien
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-if os.getenv("USE_S3") == "TRUE":
-    # AWS S3 Settings
-    AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
-    AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME")
-    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
-    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+# Default primary key field type
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
-else:
-    MEDIA_URL = '/media/'
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-    
-USE_S3 = os.getenv("USE_S3") == "FALSE"
-    
-# Check if S3 is used for storage
+# AWS S3 Integration (optional)
+USE_S3 = os.getenv("USE_S3") == "TRUE"
+
 if USE_S3:
+    # S3 Credentials from environment
     AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
     AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME")
     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
@@ -158,7 +145,14 @@ if USE_S3:
 
     AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
 
+    # Override static and media storage
     STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
-    LOGIN_URL = '/login/'
+    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
+    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
+
+# Login
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = 'offer_list'
+LOGOUT_REDIRECT_URL = 'offer_list'
