@@ -6,14 +6,19 @@ from django.shortcuts import get_object_or_404, redirect
 
 def home(request):
     return render(request, 'books/home.html')
+
 def offer_list(request):
     offers = Offer.objects.filter(active=True)
     return render(request, 'books/book_list.html', {'offers': offers})
 
 def book_list(request):
-    books = Book.objects.all()  # alle Bücher abrufen
-    return render(request, 'books/book_list.html', {'books': books})   
-# 
+    offers = Offer.objects.filter(active=True)
+    return render(request, 'books/book_list.html', {'offers': offers})
+
+@login_required
+def my_offers(request):
+    offers = Offer.objects.filter(seller=request.user)
+    return render(request, 'books/my_offers.html', {'offers': offers})
 
 @login_required
 def create_offer_view(request):
@@ -21,14 +26,12 @@ def create_offer_view(request):
         form = OfferForm(request.POST, request.FILES)
         if form.is_valid():
             offer = form.save(commit=False)
-            offer.seller = request.user  # 🔐 seller wird gesetzt
+            offer.seller = request.user
             offer.save()
-            return redirect('offer_list')
+            return redirect('thanks')
     else:
         form = OfferForm()
     return render(request, 'books/create_offer.html', {'form': form})
-
-
 
 def thanks_view(request):
     return render(request, 'books/thanks.html')
