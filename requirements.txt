@@ -2,3 +2,5 @@ Django>=4.2,<5.0
 boto3
 django-storages >=1.12.3
 python-dotenv
+gunicorn
+psycopg2-binary
