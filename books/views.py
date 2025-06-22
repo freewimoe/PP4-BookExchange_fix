@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Offer
+from .models import Book, Offer
 from .forms import OfferForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
@@ -9,6 +9,11 @@ def home(request):
 def offer_list(request):
     offers = Offer.objects.filter(active=True)
     return render(request, 'books/book_list.html', {'offers': offers})
+
+def book_list(request):
+    books = Book.objects.all()  # alle Bücher abrufen
+    return render(request, 'books/book_list.html', {'books': books})   
+# 
 
 @login_required
 def create_offer_view(request):
