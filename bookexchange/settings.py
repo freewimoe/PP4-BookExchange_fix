@@ -31,8 +31,15 @@ SECRET_KEY = 'django-insecure-s28ot=gbfricr^$gjh8nt3skmk+6s$)7hpfi1_+82e$3zgw-c_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# In bookexchange/settings.py, ändere ALLOWED_HOSTS zu:
 
+ALLOWED_HOSTS = [
+    'pp4-bookexchange-app-a3060fbcdcb6.herokuapp.com',
+    'pp4-bookexchange-app.herokuapp.com',
+    'localhost',
+    '127.0.0.1',
+    '.herokuapp.com',  # Erlaubt alle Heroku-Subdomains
+]
 
 # Application definition
 
