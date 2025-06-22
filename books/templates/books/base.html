@@ -18,9 +18,9 @@
       <ul class="navbar-nav ms-auto">
         {% if user.is_authenticated %}
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <button class="nav-link dropdown-toggle btn btn-link" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' '){this.click();}">
             👤 {{ user.username }}
-          </a>
+          </button>
           <ul class="dropdown-menu dropdown-menu-end">
             <li><a class="dropdown-item" href="{% url 'password_change' %}">🔐 Change Password</a></li>
             <li><a class="dropdown-item" href="{% url 'logout' %}">🚪 Logout</a></li>

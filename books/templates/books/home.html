@@ -1,0 +1,18 @@
+{% extends "books/base.html" %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+  <h1 class="display-4">Welcome to BookExchange</h1>
+  <p class="lead">Easily offer or find used schoolbooks in your school community.</p>
+
+  <a href="{% url 'book_list' %}" class="btn btn-primary m-2">📚 Browse Books</a>
+
+  {% if user.is_authenticated %}
+    <a href="{% url 'create_offer' %}" class="btn btn-success m-2">➕ Offer a Book</a>
+    <a href="{% url 'my_offers' %}" class="btn btn-secondary m-2">👤 My Offers</a>
+    <a href="{% url 'logout' %}" class="btn btn-outline-danger m-2">Logout</a>
+  {% else %}
+    <a href="{% url 'login' %}" class="btn btn-outline-primary m-2">🔐 Log in</a>
+  {% endif %}
+</div>
+{% endblock %}

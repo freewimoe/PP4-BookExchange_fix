@@ -4,6 +4,8 @@ from .forms import OfferForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 
+def home(request):
+    return render(request, 'books/home.html')
 def offer_list(request):
     offers = Offer.objects.filter(active=True)
     return render(request, 'books/book_list.html', {'offers': offers})
