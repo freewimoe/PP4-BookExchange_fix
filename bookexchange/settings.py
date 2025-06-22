@@ -11,11 +11,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-import os   # Import os to handle file paths
-import dj_database_url  # falls nicht vorhanden: pip install dj-database-url
-from dotenv import load_dotenv  # falls nicht vorhanden: pip install python-dotenv
-
-
+import os
+import dj_database_url
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,19 +24,17 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-s28ot=gbfricr^$gjh8nt3skmk+6s$)7hpfi1_+82e$3zgw-c_'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-s28ot=gbfricr^$gjh8nt3skmk+6s$)7hpfi1_+82e$3zgw-c_')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-# In bookexchange/settings.py, ändere ALLOWED_HOSTS zu:
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = [
     'pp4-bookexchange-app-a3060fbcdcb6.herokuapp.com',
     'pp4-bookexchange-app.herokuapp.com',
     'localhost',
     '127.0.0.1',
-    '.herokuapp.com',  # Erlaubt alle Heroku-Subdomains
+    '.herokuapp.com',
 ]
 
 # Application definition
@@ -51,12 +47,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'books',
-    'storages',  # Add 'storages' for S3 storage
+    'storages',
     'import_export',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Add WhiteNoise
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -74,6 +71,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -84,10 +82,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'bookexchange.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# Default database configuration (SQLite for local development)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -95,6 +93,12 @@ DATABASES = {
     }
 }
 
+# Override with PostgreSQL on Heroku
+if 'DATABASE_URL' in os.environ:
+    DATABASES['default'] = dj_database_url.config(
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -114,7 +118,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
@@ -130,11 +133,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
-
-# Lokale statische Dateien
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] if os.path.exists(os.path.join(BASE_DIR, 'static')) else []
+
+# Media files
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
@@ -146,20 +149,25 @@ USE_S3 = os.getenv("USE_S3") == "TRUE"
 if USE_S3:
     # S3 Credentials from environment
     AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
-    AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME")
+    AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", "us-east-1")
     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+    
+    if AWS_STORAGE_BUCKET_NAME:
+        AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
+        
+        # Override static and media storage
+        STATICFILES_STORAGE = "storages.backends.s3boto3.S3StaticStorage"
+        DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+        
+        STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
+        MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
 
-    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
+# Use WhiteNoise for static files on Heroku (if not using S3)
+if not USE_S3 and 'DATABASE_URL' in os.environ:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-    # Override static and media storage
-    STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-
-    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
-    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
-
-# Login
+# Login URLs
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = 'offer_list'
 LOGOUT_REDIRECT_URL = 'offer_list'
