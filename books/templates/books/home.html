@@ -3,17 +3,69 @@
 {% block content %}
 <div class="container mt-5 text-center">
   <h1 class="display-4">Welcome to BookExchange</h1>
-  <p class="lead">Easily offer or find used schoolbooks in your school community.</p>
+  <p class="lead">Find and offer used schoolbooks from the official European School Karlsruhe booklist.</p>
+  
+  <!-- Statistics -->
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="card bg-primary text-white">
+        <div class="card-body">
+          <h3>{{ total_books }}</h3>
+          <p>Official School Books</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card bg-success text-white">
+        <div class="card-body">
+          <h3>{{ total_offers }}</h3>
+          <p>Student Offers</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card bg-info text-white">
+        <div class="card-body">
+          <h3>{{ sections|length }}</h3>
+          <p>School Sections</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <a href="{% url 'offer_list' %}" class="btn btn-primary m-2">📚 Browse Books</a>
+  <!-- Action Buttons -->
+  <div class="mb-4">
+    <a href="{% url 'school_book_list' %}" class="btn btn-primary btn-lg m-2">📚 Browse School Books</a>
 
-  {% if user.is_authenticated %}
-    <a href="{% url 'create_offer' %}" class="btn btn-success m-2">➕ Offer a Book</a>
-    <a href="{% url 'my_offers' %}" class="btn btn-secondary m-2">👤 My Offers</a>
-    <a href="{% url 'logout' %}" class="btn btn-outline-danger m-2">Logout</a>
-  {% else %}
-    <a href="{% url 'login' %}" class="btn btn-outline-primary m-2">🔐 Log in</a>
-    <a href="/admin/" class="btn btn-outline-secondary m-2">📝 Admin</a>
+    {% if user.is_authenticated %}
+      <a href="{% url 'book_selection' %}" class="btn btn-success btn-lg m-2">➕ Offer a Book</a>
+      <a href="{% url 'my_student_offers' %}" class="btn btn-secondary btn-lg m-2">👤 My Offers</a>
+      <a href="{% url 'logout' %}" class="btn btn-outline-danger m-2">Logout</a>
+    {% else %}
+      <a href="{% url 'login' %}" class="btn btn-outline-primary btn-lg m-2">🔐 Log in to Offer Books</a>
+    {% endif %}
+  </div>
+
+  <!-- Sections Overview -->
+  {% if sections %}
+  <div class="mt-5">
+    <h3>Books by Section</h3>
+    <div class="row">
+      {% for section in sections %}
+      <div class="col-md-4 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <h5>{{ section.section }} Section</h5>
+            <p class="text-muted">{{ section.count }} books available</p>
+            <a href="{% url 'school_book_list' %}?section={{ section.section }}" class="btn btn-outline-primary btn-sm">
+              View Books
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
   {% endif %}
 </div>
 {% endblock %}

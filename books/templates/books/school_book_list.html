@@ -1,0 +1,163 @@
+{% extends "books/base.html" %}
+
+{% block title %}School Books - European School Karlsruhe{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">📚 European School Karlsruhe - Official Booklist</h1>
+            
+            <!-- Search & Filter Form -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-4">
+                            {{ search_form.search }}
+                        </div>
+                        <div class="col-md-2">
+                            {{ search_form.section }}
+                        </div>
+                        <div class="col-md-2">
+                            {{ search_form.school_class }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ search_form.subject }}
+                        </div>
+                        <div class="col-md-1">
+                            <button type="submit" class="btn btn-primary w-100">🔍</button>
+                        </div>
+                    </form>
+                    
+                    {% if search_query %}
+                    <div class="mt-2">
+                        <small class="text-muted">
+                            Searching for "{{ search_query }}" • 
+                            <a href="{% url 'school_book_list' %}" class="text-decoration-none">Clear search</a>
+                        </small>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Results Summary -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <p class="text-muted mb-0">
+                    {% if search_query %}
+                        Showing {{ total_books }} result{{ total_books|pluralize }} for "{{ search_query }}"
+                    {% else %}
+                        Showing {{ total_books }} school book{{ total_books|pluralize }}
+                    {% endif %}
+                </p>
+                
+                {% if user.is_authenticated %}
+                <a href="{% url 'book_selection' %}" class="btn btn-success">
+                    ➕ Offer a Book
+                </a>
+                {% endif %}
+            </div>
+
+            <!-- Books Grid -->
+            {% if page_obj %}
+                <div class="row">
+                    {% for book in page_obj %}
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body d-flex flex-column">
+                                <div class="mb-2">
+                                    <span class="badge bg-primary">{{ book.school_class }}</span>
+                                    <span class="badge bg-secondary">{{ book.section }}</span>
+                                    {% if book.offer_count > 0 %}
+                                        <span class="badge bg-success">{{ book.offer_count }} offer{{ book.offer_count|pluralize }}</span>
+                                    {% endif %}
+                                </div>
+                                
+                                <h6 class="card-title">{{ book.title|truncatechars:60 }}</h6>
+                                
+                                {% if book.author %}
+                                <p class="text-muted small mb-1">by {{ book.author }}</p>
+                                {% endif %}
+                                
+                                <p class="text-muted small mb-2">
+                                    <strong>Subject:</strong> {{ book.subject }}<br>
+                                    {% if book.publisher %}
+                                    <strong>Publisher:</strong> {{ book.publisher }}<br>
+                                    {% endif %}
+                                    {% if book.edition %}
+                                    <strong>Edition:</strong> {{ book.edition }}
+                                    {% endif %}
+                                </p>
+                                
+                                {% if book.isbn %}
+                                <p class="text-muted small">ISBN: {{ book.isbn }}</p>
+                                {% endif %}
+                                
+                                <div class="mt-auto">
+                                    <div class="d-flex gap-2">
+                                        <a href="{% url 'school_book_detail' book.pk %}" class="btn btn-primary btn-sm">
+                                            View Details
+                                        </a>
+                                        {% if user.is_authenticated %}
+                                            <a href="{% url 'create_student_offer' book_id=book.pk %}" class="btn btn-outline-success btn-sm">
+                                                Offer This
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Pagination -->
+                {% if page_obj.has_other_pages %}
+                <nav aria-label="Books pagination">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}">First</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Previous</a>
+                            </li>
+                        {% endif %}
+                        
+                        <li class="page-item active">
+                            <span class="page-link">
+                                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                            </span>
+                        </li>
+                        
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Next</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}">Last</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+                
+            {% else %}
+                <!-- No Results -->
+                <div class="text-center py-5">
+                    <div class="mb-4">
+                        <i class="bi bi-book" style="font-size: 4rem; color: #6c757d;"></i>
+                    </div>
+                    {% if search_query %}
+                        <h3>No books found for "{{ search_query }}"</h3>
+                        <p class="text-muted">Try searching with different keywords or browse all books.</p>
+                        <a href="{% url 'school_book_list' %}" class="btn btn-primary">Show All Books</a>
+                    {% else %}
+                        <h3>No books available</h3>
+                        <p class="text-muted">The school booklist is being updated.</p>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

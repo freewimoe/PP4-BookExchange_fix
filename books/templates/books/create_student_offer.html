@@ -1,0 +1,64 @@
+{% extends "books/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>📖 Offer a School Book</h3>
+                    {% if initial_book %}
+                    <p class="mb-0 text-muted">Book: {{ initial_book.title }}</p>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.school_book.label }}</label>
+                            {{ form.school_book }}
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{{ form.condition.label }}</label>
+                                {{ form.condition }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{{ form.price.label }}</label>
+                                {{ form.price }}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.contact_email.label }}</label>
+                            {{ form.contact_email }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.contact_phone.label }}</label>
+                            {{ form.contact_phone }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.image.label }}</label>
+                            {{ form.image }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.additional_notes.label }}</label>
+                            {{ form.additional_notes }}
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'school_book_list' %}" class="btn btn-outline-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-success">Create Offer</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

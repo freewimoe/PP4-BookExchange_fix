@@ -1,0 +1,87 @@
+{% extends "books/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <span class="badge bg-primary">{{ school_book.school_class }}</span>
+                        <span class="badge bg-secondary">{{ school_book.section }}</span>
+                    </div>
+                    
+                    <h1>{{ school_book.title }}</h1>
+                    
+                    {% if school_book.author %}
+                    <h5 class="text-muted mb-3">by {{ school_book.author }}</h5>
+                    {% endif %}
+                    
+                    <div class="row mb-3">
+                        <div class="col-sm-6">
+                            <strong>Subject:</strong> {{ school_book.subject }}
+                        </div>
+                        <div class="col-sm-6">
+                            <strong>Section:</strong> {{ school_book.get_section_display }}
+                        </div>
+                    </div>
+                    
+                    {% if school_book.publisher %}
+                    <p><strong>Publisher:</strong> {{ school_book.publisher }}</p>
+                    {% endif %}
+                    
+                    {% if school_book.edition %}
+                    <p><strong>Edition:</strong> {{ school_book.edition }}</p>
+                    {% endif %}
+                    
+                    {% if school_book.isbn %}
+                    <p><strong>ISBN:</strong> {{ school_book.isbn }}</p>
+                    {% endif %}
+                    
+                    {% if school_book.notes %}
+                    <p><strong>Notes:</strong> {{ school_book.notes }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>💰 Available Offers</h5>
+                </div>
+                <div class="card-body">
+                    {% if offers %}
+                        {% for offer in offers %}
+                        <div class="border-bottom mb-3 pb-3">
+                            <div class="d-flex justify-content-between">
+                                <strong>€{{ offer.price }}</strong>
+                                <span class="badge bg-info">{{ offer.get_condition_display }}</span>
+                            </div>
+                            <small class="text-muted">by {{ offer.seller.username }}</small><br>
+                            <a href="mailto:{{ offer.contact_email }}" class="btn btn-sm btn-outline-primary mt-2">
+                                📧 Contact Seller
+                            </a>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted">No offers yet.</p>
+                    {% endif %}
+                    
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'create_student_offer' book_id=school_book.pk %}" class="btn btn-success w-100">
+                        ➕ Offer This Book
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-3">
+        <a href="{% url 'school_book_list' %}" class="btn btn-outline-secondary">
+            ← Back to Book List
+        </a>
+    </div>
+</div>
+{% endblock %}

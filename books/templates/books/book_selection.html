@@ -1,0 +1,60 @@
+{% extends "books/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>📚 Select a Book to Offer</h1>
+    <p class="text-muted">Choose from the official European School Karlsruhe booklist:</p>
+    
+    <!-- Filter -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">{{ filter_form.section }}</div>
+                <div class="col-md-4">{{ filter_form.school_class }}</div>
+                <div class="col-md-3">{{ filter_form.subject }}</div>
+                <div class="col-md-1">
+                    <button type="submit" class="btn btn-primary w-100">Filter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <p class="text-muted">{{ total_books }} books available</p>
+    
+    <!-- Books -->
+    <div class="row">
+        {% for book in page_obj %}
+        <div class="col-md-6 col-lg-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-2">
+                        <span class="badge bg-primary">{{ book.school_class }}</span>
+                        <span class="badge bg-secondary">{{ book.section }}</span>
+                    </div>
+                    <h6>{{ book.title|truncatechars:50 }}</h6>
+                    <p class="text-muted small">{{ book.subject }}</p>
+                    <a href="{% url 'create_student_offer' book_id=book.pk %}" class="btn btn-success btn-sm w-100">
+                        ➕ Offer This Book
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <nav>
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+            {% endif %}
+            <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
+            {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}
