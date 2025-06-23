@@ -10,10 +10,10 @@
   {% if user.is_authenticated %}
     <a href="{% url 'create_offer' %}" class="btn btn-success m-2">➕ Offer a Book</a>
     <a href="{% url 'my_offers' %}" class="btn btn-secondary m-2">👤 My Offers</a>
-    <a href="{% url 'account_logout' %}" class="btn btn-outline-danger m-2">Logout</a>
+    <a href="{% url 'logout' %}" class="btn btn-outline-danger m-2">Logout</a>
   {% else %}
-    <a href="{% url 'account_login' %}" class="btn btn-outline-primary m-2">🔐 Log in</a>
-    <a href="{% url 'account_signup' %}" class="btn btn-outline-secondary m-2">📝 Sign up</a>
+    <a href="{% url 'login' %}" class="btn btn-outline-primary m-2">🔐 Log in</a>
+    <a href="/admin/" class="btn btn-outline-secondary m-2">📝 Admin</a>
   {% endif %}
 </div>
 {% endblock %}

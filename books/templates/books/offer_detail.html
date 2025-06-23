@@ -1,12 +1,118 @@
 {% extends "books/base.html" %}
+
+{% block title %}{{ offer.book.title }} - BookExchange{% endblock %}
+
 {% block content %}
-<div class="container mt-5">
-    <h2>{{ offer.book.title }}</h2>
-    <p><strong>Author:</strong> {{ offer.book.author }}</p>
-    <p><strong>Condition:</strong> {{ offer.condition }}</p>
-    <p><strong>Contact:</strong> {{ offer.contact }}</p>
-    {% if offer.photo %}
-        <img src="{{ offer.photo.url }}" alt="Book" style="max-width: 200px;">
-    {% endif %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                {% if offer.image %}
+                    <img src="{{ offer.image.url }}" class="card-img-top" alt="{{ offer.book.title }}" style="max-height: 400px; object-fit: cover;">
+                {% else %}
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 300px;">
+                        <span class="text-muted h3">📖 No Image Available</span>
+                    </div>
+                {% endif %}
+                
+                <div class="card-body">
+                    <h1 class="card-title">{{ offer.book.title }}</h1>
+                    <h4 class="card-subtitle mb-3 text-muted">by {{ offer.book.author }}</h4>
+                    
+                    <div class="row mb-3">
+                        <div class="col-sm-6">
+                            <strong>Subject:</strong> <span class="badge bg-primary">{{ offer.book.section }}</span>
+                        </div>
+                        <div class="col-sm-6">
+                            <strong>Class:</strong> <span class="badge bg-secondary">{{ offer.book.school_class }}</span>
+                        </div>
+                    </div>
+                    
+                    {% if offer.book.edition %}
+                    <p><strong>Edition:</strong> {{ offer.book.edition }}</p>
+                    {% endif %}
+                    
+                    {% if offer.book.publisher %}
+                    <p><strong>Publisher:</strong> {{ offer.book.publisher }}</p>
+                    {% endif %}
+                    
+                    {% if offer.book.isbn %}
+                    <p><strong>ISBN:</strong> {{ offer.book.isbn }}</p>
+                    {% endif %}
+                    
+                    {% if offer.book.notes %}
+                    <div class="mb-3">
+                        <strong>Notes:</strong>
+                        <p class="text-muted">{{ offer.book.notes|linebreaks }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">💰 Offer Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Price:</strong>
+                        <h3 class="text-success">€{{ offer.price }}</h3>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <strong>Condition:</strong><br>
+                        <span class="badge 
+                            {% if offer.condition == 'new' %}bg-success
+                            {% elif offer.condition == 'used' %}bg-info
+                            {% elif offer.condition == 'worn' %}bg-warning
+                            {% else %}bg-danger{% endif %} fs-6">
+                            {{ offer.get_condition_display }}
+                        </span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <strong>Seller:</strong><br>
+                        <span class="text-muted">{{ offer.seller.username }}</span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <strong>Contact:</strong><br>
+                        <a href="mailto:{{ offer.contact_email }}" class="btn btn-outline-primary btn-sm">
+                            📧 {{ offer.contact_email }}
+                        </a>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <strong>Posted:</strong><br>
+                        <small class="text-muted">{{ offer.created_at|date:"F d, Y" }}</small>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="d-grid gap-2">
+                        <a href="mailto:{{ offer.contact_email }}?subject=BookExchange: {{ offer.book.title }}&body=Hi {{ offer.seller.username }}, I'm interested in your book '{{ offer.book.title }}' for €{{ offer.price }}." 
+                           class="btn btn-success">
+                            📧 Contact Seller
+                        </a>
+                        
+                        {% if user == offer.seller %}
+                        <a href="{% url 'edit_offer' offer.pk %}" class="btn btn-warning">
+                            ✏️ Edit Offer
+                        </a>
+                        <a href="{% url 'delete_offer' offer.pk %}" class="btn btn-danger">
+                            🗑️ Delete Offer
+                        </a>
+                        {% endif %}
+                        
+                        <a href="{% url 'offer_list' %}" class="btn btn-outline-secondary">
+                            ← Back to Browse
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

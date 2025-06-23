@@ -171,3 +171,11 @@ if not USE_S3 and 'DATABASE_URL' in os.environ:
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = 'offer_list'
 LOGOUT_REDIRECT_URL = 'offer_list'
+
+# Login/Logout Redirects
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL = '/login/'
+
+# Session Settings
+SESSION_COOKIE_AGE = 86400  # 24 hours

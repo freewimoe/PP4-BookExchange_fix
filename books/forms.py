@@ -33,7 +33,7 @@ class OfferForm(forms.ModelForm):
         label="School Class"
     )
     book_notes = forms.CharField(
-        widget=forms.Textarea(rows=3),
+        widget=forms.Textarea(attrs={'rows': 3}),
         label="Additional Notes (optional)",
         required=False
     )
