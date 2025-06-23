@@ -9,23 +9,23 @@ A full-stack Django web application for exchanging used schoolbooks within the E
 
 ## Test Accounts
 
-### For Code Institute Assessors:
+## 🔑 Test Accounts for Code Institute Assessors
 
-**Demo User Account:**
+**Demo Student Account:**
 - Username: `demo`
 - Password: `demo123`
-- Use this to test student functionality (create offers, browse books)
+- Use this to test student features (browse books, create offers)
 
 **Admin Account:**
-- Username: `admin`
-- Password: `testpass123`
-- Access: [Admin Interface](https://pp4-bookexchange-app-a3060fbcdcb6.herokuapp.com/admin/)
-- Full access to manage books and users
+- Username: `testadmin`
+- Password: `admin123`
+- Admin URL: https://pp4-bookexchange-app-a3060fbcdcb6.herokuapp.com/admin/
+- Full access to manage books, offers, and users
 
-### Quick Testing Guide:
-1. **Browse Books**: No login required - view all 470+ school books
-2. **Student Features**: Login with demo/demo123 to create offers
-3. **Admin Features**: Login with admin/testpass123 for full management
+**Quick Testing Steps:**
+1. Browse 470+ school books (no login required)
+2. Login as `demo` to create and manage book offers
+3. Login as `testadmin` for complete admin access
 
 ## Project Overview
 
