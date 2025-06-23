@@ -7,6 +7,26 @@ A full-stack Django web application for exchanging used schoolbooks within the E
 ## Live Application
 🔗 **Deployed on Heroku:** [https://pp4-bookexchange-app-a3060fbcdcb6.herokuapp.com/](https://pp4-bookexchange-app-a3060fbcdcb6.herokuapp.com/)
 
+## Test Accounts
+
+### For Code Institute Assessors:
+
+**Demo User Account:**
+- Username: `demo`
+- Password: `demo123`
+- Use this to test student functionality (create offers, browse books)
+
+**Admin Account:**
+- Username: `admin`
+- Password: `testpass123`
+- Access: [Admin Interface](https://pp4-bookexchange-app-a3060fbcdcb6.herokuapp.com/admin/)
+- Full access to manage books and users
+
+### Quick Testing Guide:
+1. **Browse Books**: No login required - view all 470+ school books
+2. **Student Features**: Login with demo/demo123 to create offers
+3. **Admin Features**: Login with admin/testpass123 for full management
+
 ## Project Overview
 
 BookExchange is a comprehensive book trading platform designed specifically for the European School Karlsruhe. Students can browse the official school booklist (470+ books), create offers for their used books, and connect with other students to buy/sell textbooks.
