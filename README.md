@@ -11,21 +11,20 @@ A full-stack Django web application for exchanging used schoolbooks within the E
 
 ## 🔑 Test Accounts for Code Institute Assessors
 
-**Demo Student Account:**
-- Username: `demo`
-- Password: `demo123`
-- Use this to test student features (browse books, create offers)
-
 **Admin Account:**
-- Username: `testadmin`
-- Password: `admin123`
+- Username: `assessor`
+- Password: `test123`
 - Admin URL: https://pp4-bookexchange-app-a3060fbcdcb6.herokuapp.com/admin/
-- Full access to manage books, offers, and users
+
+**Demo Student Account:**
+- Username: `student`  
+- Password: `demo123`
+- Use this to test student features (create offers, browse books)
 
 **Quick Testing Steps:**
 1. Browse 470+ school books (no login required)
-2. Login as `demo` to create and manage book offers
-3. Login as `testadmin` for complete admin access
+2. Login as `student` to create and manage book offers
+3. Login as `assessor` for complete admin access
 
 ## Project Overview
 
@@ -280,15 +279,15 @@ python manage.py runserver
 ## Screenshots
 
 ### Homepage
-![Homepage with Statistics](screenshots/homepage.png)
+![Homepage with Statistics](screenshots/Homepage-screenshot.png)
 *Homepage showing book statistics and navigation*
 
 ### Book List
-![School Book List](screenshots/book-list.png)
+![School Book List](screenshots/Booklist-screenshot.png)
 *Browse official European School Karlsruhe booklist*
 
 ### Book Details
-![Book Detail View](screenshots/book-detail.png)
+![Book Detail View](screenshots/Bookdetails-screenshot.png)
 *Detailed book information with available offers*
 
 ### Create Offer

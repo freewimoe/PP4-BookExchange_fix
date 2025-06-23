@@ -1,0 +1,92 @@
+[
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$HSAfr8x5bLi3MvUTJTDvy4$zoJ32k9e2TYzo6iyqCCZM3dNNxQM9V9pAaIJurIvIOg=",
+    "last_login": "2025-06-15T14:13:40Z",
+    "is_superuser": true,
+    "username": "mollerfr",
+    "first_name": "Friedrich-Wilhelm",
+    "last_name": "Möller",
+    "email": "mollerfr@teacher.eursc.eu",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-06-15T07:03:54Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$cmfmFrxFKuIhR1RxDaQnV7$HHiU2lpRydNlemTfZMdftxwU196hirhGUkHTZxW998s=",
+    "last_login": "2025-06-23T09:04:04.598Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "Friedrich-W.",
+    "last_name": "Moeller",
+    "email": "fwmoeller@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-06-22T18:09:47Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$i79LLOg0bk4pn0XVIbqeWa$AmUlvPdBYUVv9oroztxpiph235TgD7CSHnIGcmz6Ep4=",
+    "last_login": "2025-06-22T21:23:28.461Z",
+    "is_superuser": false,
+    "username": "moellerf",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-06-22T19:26:54.038Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$LXJBFzgwGw3qBKMURx9azO$6Je2qqXgYb1rmR2FpXJNuHFbxaMmE6/AzwmjkoTh47Y=",
+    "last_login": null,
+    "is_superuser": true,
+    "username": "assessor",
+    "first_name": "Code",
+    "last_name": "Institute",
+    "email": "assessor@codeinstitutetest.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-06-23T11:04:30.782Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 7,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$B9QFWgviHttThWfZr8scI7$6OBj3gewjTvrQ/ayP6j23uC86MxKtX6HFyWApUnTYX4=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "student",
+    "first_name": "Demo",
+    "last_name": "Student",
+    "email": "student@test.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-06-23T11:04:31.025Z",
+    "groups": [],
+    "user_permissions": []
+  }
+}
+]
