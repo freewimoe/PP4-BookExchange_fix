@@ -37,6 +37,15 @@ ALLOWED_HOSTS = [
     '.herokuapp.com',
 ]
 
+# CSRF and CORS settings for Heroku
+if 'DATABASE_URL' in os.environ:
+    CSRF_TRUSTED_ORIGINS = [
+        'https://pp4-bookexchange-app-a3060fbcdcb6.herokuapp.com',
+        'https://pp4-bookexchange-app.herokuapp.com',
+    ]
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -156,21 +165,29 @@ if USE_S3:
     if AWS_STORAGE_BUCKET_NAME:
         AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
         
-        # Override static and media storage
-        STATICFILES_STORAGE = "storages.backends.s3boto3.S3StaticStorage"
-        DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+        # Override static and media storage for Django 4.2+
+        STORAGES = {
+            "default": {
+                "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+            },
+            "staticfiles": {
+                "BACKEND": "storages.backends.s3boto3.S3StaticStorage",
+            },
+        }
         
         STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
         MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
 
 # Use WhiteNoise for static files on Heroku (if not using S3)
 if not USE_S3 and 'DATABASE_URL' in os.environ:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# Login URLs
-LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = 'offer_list'
-LOGOUT_REDIRECT_URL = 'offer_list'
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
 
 # Login/Logout Redirects
 LOGIN_REDIRECT_URL = '/'
@@ -179,3 +196,32 @@ LOGIN_URL = '/login/'
 
 # Session Settings
 SESSION_COOKIE_AGE = 86400  # 24 hours
+
+# Logging configuration for Heroku
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}

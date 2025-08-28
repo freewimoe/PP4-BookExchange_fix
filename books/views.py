@@ -4,12 +4,16 @@ from django.contrib import messages
 from django.db.models import Q, Count
 from django.core.paginator import Paginator
 
+# Constants
+FEATURE_UNAVAILABLE_MSG = "Feature temporarily unavailable."
+
 # Try to import new models, fallback to legacy
 try:
     from .models import SchoolBook, StudentOffer
     NEW_MODELS_AVAILABLE = True
-except:
+except ImportError:
     NEW_MODELS_AVAILABLE = False
+    print("Warning: New models (SchoolBook, StudentOffer) not available")
 
 # Always import legacy models for compatibility
 from .models import Book, Offer
@@ -26,7 +30,7 @@ def home(request):
                     count=Count('id')
                 ).order_by('section'),
             }
-        except:
+        except Exception:
             # Fallback to static data
             context = {
                 'total_books': 470,
@@ -69,7 +73,7 @@ def school_book_list(request):
                 'search_query': '',
             }
             return render(request, 'books/school_book_list.html', context)
-        except:
+        except Exception:
             pass
     
     # Fallback to legacy system
@@ -87,7 +91,7 @@ def school_book_detail(request, pk):
                 'user_can_offer': request.user.is_authenticated,
             }
             return render(request, 'books/school_book_detail.html', context)
-        except:
+        except Exception:
             pass
     
     # Fallback
@@ -108,7 +112,7 @@ def book_selection(request):
                 'total_books': books.count(),
             }
             return render(request, 'books/book_selection.html', context)
-        except:
+        except Exception:
             pass
     
     # Fallback to legacy create offer
@@ -203,16 +207,17 @@ def delete_offer(request, pk):
 
 # Placeholder functions for missing features
 @login_required
+@login_required
 def edit_student_offer(request, pk):
-    messages.info(request, "Feature temporarily unavailable.")
+    messages.info(request, FEATURE_UNAVAILABLE_MSG)
     return redirect('my_offers')
 
 @login_required
 def delete_student_offer(request, pk):
-    messages.info(request, "Feature temporarily unavailable.")
+    messages.info(request, FEATURE_UNAVAILABLE_MSG)
     return redirect('my_offers')
 
 @login_required
 def mark_as_sold(request, pk):
-    messages.info(request, "Feature temporarily unavailable.")
+    messages.info(request, FEATURE_UNAVAILABLE_MSG)
     return redirect('my_offers')
