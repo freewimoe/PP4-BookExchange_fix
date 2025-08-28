@@ -42,9 +42,18 @@ if 'DATABASE_URL' in os.environ:
     CSRF_TRUSTED_ORIGINS = [
         'https://pp4-bookexchange-app-a3060fbcdcb6.herokuapp.com',
         'https://pp4-bookexchange-app.herokuapp.com',
+        'https://*.herokuapp.com',
     ]
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+else:
+    # Development settings
+    CSRF_TRUSTED_ORIGINS = [
+        'http://localhost:8000',
+        'http://127.0.0.1:8000',
+    ]
 
 # Application definition
 
